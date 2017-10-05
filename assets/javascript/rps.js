@@ -17,6 +17,7 @@
 
   var playersRef = database.ref("/players");
   var rootRef = database.ref();
+  var turnRef = database.ref("/turn");
   
   var playerId = 0;
   var playerName = null;
@@ -24,7 +25,29 @@
   var isPlayerJoined_1 = false;
   var isPlayerJoined_2 = false;
 
+  turnRef.on('value', function(snapshot){
+    console.log("turn", snapshot.key, snapshot.val());
+    var id = snapshot.val();
+    var currentId = "#player-" + id;
+    if(null !== id){
+      $(currentId).addClass("currentTurn");
+    }
+  });
+
   playersRef.once("value", function(snapshot) {
+    console.log("on value");
+  });
+
+  playersRef.on("child_changed", function(childSnapshot){
+    console.log("on child changed");
+  });
+
+  playersRef.on("child_removed", function(childSnapshot){
+    
+    turnRef.remove();
+    var removedId = childSnapShot.key;
+    console.log("removed", removedId);
+
 
   });
 
@@ -55,8 +78,26 @@
       });
     }
    });
-    
 
+  $("#player-1-options").on("click", "p a", function(){
+    $("#player-1").removeClass("currentTurn");
+    var choice = $(this).attr("data-option");
+    console.log("player-1", choice);
+    rootRef.update({
+        turn: 2
+      });
+
+  });
+
+  $("#player-2-options").on('click', 'p a', function(){
+    $("#player-2").removeClass("currentTurn");
+    var choice = $(this).attr("data-option");
+    console.log("player-2", choice);
+    rootRef.update({
+        turn: 1
+      });
+  });
+    
   $("#start-btn").click(function(){
     playerName = $("#name").val();
     $("#name").val('');
