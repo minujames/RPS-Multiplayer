@@ -1,0 +1,41 @@
+.header{
+  background-color: black;
+  text-align: center;
+  color: white;
+}
+
+.player{
+  width: 100%;
+  height: 200px;
+  border-style: solid;
+  border-width: 2px;
+  border-color: lightgrey;
+  margin-top: 1vh;
+}
+
+#login{
+  text-align: center;
+  /*padding: 20px;*/
+  /*background-color: red;*/
+}
+
+#name{
+  font-size: 18px;
+}
+
+#players{
+
+}
+
+#main-content{
+  /*pointer-events:none;*/
+  /*background-color: red;*/
+}
+
+#player-1-wrapper{
+  display: none;
+}
+
+#player-2-wrapper{
+  display: none;
+}
