@@ -29,6 +29,16 @@
   var player_choice_1 = null;
   var player_choice_2 = null;
 
+
+  playersRef.once('value', function(snapShot){
+    var playersPath = snapShot.val();
+    console.log("snapshot", snapShot);
+    if(snapShot.hasChild("1") && snapShot.hasChild("2")){
+      $("#message").text("Sorry! Slots are full! Please wait to play!");
+      $("#login-wrapper").hide();
+    }
+  });
+
   playersRef.child("1/choice").on("value", function(snapShot){
     var childId = parseInt(snapShot.key);
     player_choice_1 = snapShot.val();
@@ -90,6 +100,7 @@
 
     if(id === 1){
       $("#result").empty();
+      $("#player-1-options").empty();
       $("#player-2-options").empty();
     }
     var currentPlayer = "#player-" + id;
@@ -103,7 +114,6 @@
       }
     }
   });
-
 
   function rockPaperScissors(){
     // 1, 2, tie
@@ -157,7 +167,8 @@
 
     if(playerId === 0){
       $("#login-wrapper").show();
-      $("#message").hide();
+      $("#players").show();
+      $("#message").empty(); //changed from hide
     }
   });
 
@@ -171,7 +182,8 @@
 
   function displayChoice(choice){
     $("#player-" + playerId + "-options").empty();
-    var selectedOption = $("<p>").append($("<a>").attr("href", "#").text(choice).attr("data-option", choice));
+    // var selectedOption = $("<p>").append($("<a>").attr("href", "#").text(choice).attr("data-option", choice));
+    var selectedOption = $("<p>").text(choice);
     $("#player-" + playerId + "-options").append(selectedOption);
   }
 
@@ -180,23 +192,17 @@
 
     if( childPlayerId === 1){
       isPlayerJoined_1 = true;
-
-      if(childPlayerId === playerId){
-        $("#login-wrapper").hide();
-
-        $("#message").append($("<p>").text("Hi " + childSnapShot.val().name + " You are Player1"));
-        $("#message").show();
-      }
     }
-    else if(parseInt(childPlayerId) === 2){
+    else if(childPlayerId === 2){
       isPlayerJoined_2 = true;
+    }
 
-      if(childPlayerId === playerId){
-        $("#login-wrapper").hide();
+    if(childPlayerId === playerId){
+      $("#login-wrapper").hide();
 
-        $("#message").append($("<p>").text("Hi " + childSnapShot.val().name + " You are Player2"));
-        $("#message").show();
-      }
+      $("#message").empty();
+      $("#message").append($("<p>").text("Hi " + childSnapShot.val().name + " You are Player " + childPlayerId));
+      $("#message").show();
     }
 
     $("#player-" + childPlayerId + "-name").text(childSnapShot.val().name);
@@ -206,12 +212,15 @@
     $("#player-" + childPlayerId + "-wrapper").show();
     $("#player-" + childPlayerId + "-status").show();
     $("#player-" + childPlayerId + "-waiting").hide();
+    $("#players").show();
 
     if(isPlayerJoined_1 && isPlayerJoined_2){
+      // Waiting player
       if(playerId === 0){
         $("#players").hide();
-        // not an active player
-        //TODO: disable login and show error message
+        $("#login-wrapper").hide();
+        $("#message").text("Sorry! Slots are full! Please wait to play!");
+        $("#message").show();
       }
       else{
         rootRef.update({
@@ -225,6 +234,7 @@
     var pchoice = $(this).attr("data-option");
     if(playerId === 1){
 
+      // Removing and updating inorder to get the 'value' event
       playerRef.child('choice').remove();
       playerRef.update({
         choice: pchoice
@@ -249,7 +259,7 @@
       displayChoice(pchoice);
 
       // call it on set timeout
-      setTimeout(nextGame, 5000);
+      setTimeout(nextGame, 3000);
     }
   });
 

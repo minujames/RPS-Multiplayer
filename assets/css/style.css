@@ -17,7 +17,7 @@
 
 #message{
   text-align: center;
-  font-size: 1.2em;
+  font-size: 1.3em;
 }
 
 #login{
@@ -38,11 +38,6 @@
 
 #message{
   display: none;
-}
-
-#main-content{
-  /*pointer-events:none;*/
-  /*background-color: red;*/
 }
 
 #player-1-wrapper{
