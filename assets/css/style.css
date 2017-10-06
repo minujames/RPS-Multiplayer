@@ -11,18 +11,26 @@
   border-width: 2px;
   border-color: lightgrey;
   margin-top: 1vh;
+  font-size: 1.5em;
+  text-align: center;
+}
+
+.player-status{
+  /*margin-top: 120px;*/
+}
+
+#message{
+  text-align: center;
+  font-size: 1.2em;
 }
 
 #login{
   text-align: center;
-  /*padding: 20px;*/
-  /*background-color: red;*/
 }
 
 .currentTurn{
   border-color: green;
 }
-
 
 #name{
   font-size: 18px;
@@ -30,6 +38,10 @@
 
 #players{
 
+}
+
+#message{
+  display: none;
 }
 
 #main-content{
